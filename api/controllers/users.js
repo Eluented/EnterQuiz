@@ -36,4 +36,13 @@ async function update(req, res) {
   }
 }
 
-module.exports = { index, show, create, update };
+async function destroy(req, res) {
+  try {
+    const users = await User.deleteByUser(req.params.id);
+    res.status(201).json(users);
+  } catch (err) {
+    res.status(422).json({ err });
+  }
+}
+
+module.exports = { index, show, create, update, destroy };
