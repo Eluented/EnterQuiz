@@ -10,12 +10,10 @@ Users are then able to be able to view a high scores list
 ### Technologies Used:
 
 - Figma
-- GitHub Kanban
 - NPM
 - Express
 - Node.js
 - Javascript
-- Bootstrap
 - HTML/CSS
 - MongoDB atlas
 - React Js
@@ -38,6 +36,5 @@ Users are then able to be able to view a high scores list
 
 ## Contributors
 
-- [Thayaan Srisathialingam](https://github.com/THAYAANS)
-- [Albert Stoykov](https://github.com/AlbertStoykov)
+- [Onur](https://github.com/eluented)
 - [Aafthab Ashraff](https://github.com/iAmash412)
