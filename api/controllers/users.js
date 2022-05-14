@@ -1,4 +1,4 @@
-const User = require('../models/User');
+const User = require('../models/Users.js');
 
 async function index(req, res) {
   try {
@@ -27,4 +27,13 @@ async function create(req, res) {
   }
 }
 
-module.exports = { index, show, create };
+async function update(req, res) {
+  try {
+    const users = await User.updateScore(req.body);
+    res.status(201).json(users);
+  } catch (err) {
+    res.status(422).json({ err });
+  }
+}
+
+module.exports = { index, show, create, update };
