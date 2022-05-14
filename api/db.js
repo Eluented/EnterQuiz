@@ -1,6 +1,7 @@
 const { MongoClient } = require('mongodb');
 
 let dbConnection;
+
 const mongodbURI = 'mongodb+srv://ooga:booga@cluster0.vduct.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
 
 module.exports = {
