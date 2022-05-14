@@ -1,5 +1,5 @@
 {
-  "description": "LAP 2 debug assignment",
+  "description": "reactQuizApp",
   "scripts": {
     "start": "node api/index.js",
     "dev": "nodemon --legacy-watch",
@@ -13,7 +13,7 @@
           "/node_modules/"
       ]
   },
-  "author": "Apex Gaming",
+  "author": "enterQuiz",
   "license": "ISC",
   "devDependencies": {
       "jest": "^26.4.2",

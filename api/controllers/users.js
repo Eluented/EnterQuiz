@@ -29,7 +29,7 @@ async function create(req, res) {
 
 async function update(req, res) {
   try {
-    const users = await User.updateScore(req.body);
+    const users = await User.updateScore(req.params.id, req.body);
     res.status(201).json(users);
   } catch (err) {
     res.status(422).json({ err });

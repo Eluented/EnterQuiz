@@ -11,7 +11,7 @@ class User {
       this.id = data.id;
       this.username = data.username;
       this.score = data.score;
-    }
+    }   
   
     static get all() {
       return new Promise(async (res, rej) => {
@@ -51,7 +51,7 @@ class User {
   
           res(user);
         } catch (err) {
-          rej(`Error creating user: ${err}`);
+          rej(`Error Creating User: ${err}`);
         }
       });
     }
@@ -59,13 +59,13 @@ class User {
     static findByUsername(username) {
       return new Promise(async (res, rej) => {
         try {
-          const user = await db
+          const findUser = await db
             .collection('users')
             .findOne({ username: username });
           
-          res(user);
+          res(new User(findUser));
         } catch (err) {
-          rej(`Error retrieving user: ${err}`);
+          rej(`Error Retrieving User: ${err}`);
         }
       });
     }
@@ -73,13 +73,16 @@ class User {
     static updateScore(username, score) {
         return new Promise(async (res, rej) => {
           try {
-            const user = await db
+            const updateUser = await db
               .collection('users')
-              .updateOne({username: username}, {$set: score})
+              .updateOne(
+                  {username: username}, 
+                  {$set: score}
+                );
 
-            res(user);
+            res(User(updateUser));
           } catch (err) {
-            rej(`Error retrieving user: ${err}`);
+            rej(`Error Updating User: ${err}`);
             console.log(err)
           }
         });
