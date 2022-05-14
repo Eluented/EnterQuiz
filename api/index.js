@@ -1,5 +1,16 @@
-const app = require('./server');
+const { getDb, connectToDb } = require('./db')
+const app = require('./app')
+
+// db connection
+let db
 
 const port = process.env.PORT || 3001;
 
-app.listen(port, () => console.log(`Express now departing from port ${port}!`));
+connectToDb((err) => {
+    if(!err){
+      app.listen(port, () => {
+        console.log(`app listening on port ${port}`)
+      })
+      db = getDb()
+    }
+})

@@ -1,7 +1,5 @@
 const usersController = require('../controllers/users')
 const User = require('../models/User');
-const middleware = require('../middleware/auth')
-const verifyToken = require('../middleware/auth')
 
 const mockSend = jest.fn();
 const mockJson = jest.fn();
