@@ -2,19 +2,22 @@ import { getBatch } from './batch'; // encapsulates the subscription logic for c
 // well as nesting subscriptions of descendant components, so that we can ensure the
 // ancestor components re-render before descendants
 
+var nullListeners = {
+  notify: function notify() {}
+};
+
 function createListenerCollection() {
-  const batch = getBatch();
-  let first = null;
-  let last = null;
+  var batch = getBatch();
+  var first = null;
+  var last = null;
   return {
-    clear() {
+    clear: function clear() {
       first = null;
       last = null;
     },
-
-    notify() {
-      batch(() => {
-        let listener = first;
+    notify: function notify() {
+      batch(function () {
+        var listener = first;
 
         while (listener) {
           listener.callback();
@@ -22,10 +25,9 @@ function createListenerCollection() {
         }
       });
     },
-
-    get() {
-      let listeners = [];
-      let listener = first;
+    get: function get() {
+      var listeners = [];
+      var listener = first;
 
       while (listener) {
         listeners.push(listener);
@@ -34,11 +36,10 @@ function createListenerCollection() {
 
       return listeners;
     },
-
-    subscribe(callback) {
-      let isSubscribed = true;
-      let listener = last = {
-        callback,
+    subscribe: function subscribe(callback) {
+      var isSubscribed = true;
+      var listener = last = {
+        callback: callback,
         next: null,
         prev: last
       };
@@ -66,62 +67,56 @@ function createListenerCollection() {
         }
       };
     }
-
   };
 }
 
-const nullListeners = {
-  notify() {},
-
-  get: () => []
-};
-export function createSubscription(store, parentSub) {
-  let unsubscribe;
-  let listeners = nullListeners;
-
-  function addNestedSub(listener) {
-    trySubscribe();
-    return listeners.subscribe(listener);
+var Subscription = /*#__PURE__*/function () {
+  function Subscription(store, parentSub) {
+    this.store = store;
+    this.parentSub = parentSub;
+    this.unsubscribe = null;
+    this.listeners = nullListeners;
+    this.handleChangeWrapper = this.handleChangeWrapper.bind(this);
   }
 
-  function notifyNestedSubs() {
-    listeners.notify();
-  }
+  var _proto = Subscription.prototype;
 
-  function handleChangeWrapper() {
-    if (subscription.onStateChange) {
-      subscription.onStateChange();
-    }
-  }
-
-  function isSubscribed() {
-    return Boolean(unsubscribe);
-  }
-
-  function trySubscribe() {
-    if (!unsubscribe) {
-      unsubscribe = parentSub ? parentSub.addNestedSub(handleChangeWrapper) : store.subscribe(handleChangeWrapper);
-      listeners = createListenerCollection();
-    }
-  }
-
-  function tryUnsubscribe() {
-    if (unsubscribe) {
-      unsubscribe();
-      unsubscribe = undefined;
-      listeners.clear();
-      listeners = nullListeners;
-    }
-  }
-
-  const subscription = {
-    addNestedSub,
-    notifyNestedSubs,
-    handleChangeWrapper,
-    isSubscribed,
-    trySubscribe,
-    tryUnsubscribe,
-    getListeners: () => listeners
+  _proto.addNestedSub = function addNestedSub(listener) {
+    this.trySubscribe();
+    return this.listeners.subscribe(listener);
   };
-  return subscription;
-}
+
+  _proto.notifyNestedSubs = function notifyNestedSubs() {
+    this.listeners.notify();
+  };
+
+  _proto.handleChangeWrapper = function handleChangeWrapper() {
+    if (this.onStateChange) {
+      this.onStateChange();
+    }
+  };
+
+  _proto.isSubscribed = function isSubscribed() {
+    return Boolean(this.unsubscribe);
+  };
+
+  _proto.trySubscribe = function trySubscribe() {
+    if (!this.unsubscribe) {
+      this.unsubscribe = this.parentSub ? this.parentSub.addNestedSub(this.handleChangeWrapper) : this.store.subscribe(this.handleChangeWrapper);
+      this.listeners = createListenerCollection();
+    }
+  };
+
+  _proto.tryUnsubscribe = function tryUnsubscribe() {
+    if (this.unsubscribe) {
+      this.unsubscribe();
+      this.unsubscribe = null;
+      this.listeners.clear();
+      this.listeners = nullListeners;
+    }
+  };
+
+  return Subscription;
+}();
+
+export { Subscription as default };

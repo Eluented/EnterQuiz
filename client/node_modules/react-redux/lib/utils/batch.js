@@ -8,13 +8,17 @@ function defaultNoopBatch(callback) {
   callback();
 }
 
-let batch = defaultNoopBatch; // Allow injecting another batching function later
+var batch = defaultNoopBatch; // Allow injecting another batching function later
 
-const setBatch = newBatch => batch = newBatch; // Supply a getter just to skip dealing with ESM bindings
+var setBatch = function setBatch(newBatch) {
+  return batch = newBatch;
+}; // Supply a getter just to skip dealing with ESM bindings
 
 
 exports.setBatch = setBatch;
 
-const getBatch = () => batch;
+var getBatch = function getBatch() {
+  return batch;
+};
 
 exports.getBatch = getBatch;
