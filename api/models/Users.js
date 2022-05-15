@@ -88,7 +88,22 @@ class User {
         });
     }
 
+    static deleteByUser(username) {
+        return new Promise(async (res, rej) => {
+          try {
+            const deleteUser = await db
+              .collection('users')
+              .deleteOne(
+                  {username: username}, 
+                );
+
+            res(new User(deleteUser));
+          } catch (err) {
+            rej(`Error Updating User: ${err}`);
+            console.log(err)
+          }
+        });
+    }
   };
-  
-  
+
   module.exports = User;
